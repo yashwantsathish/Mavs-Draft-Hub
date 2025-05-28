@@ -62,7 +62,7 @@ function PlayerProfile() {
   };
 
   {/* All content below is dynamically pulled from structured JSON – no hardcoded values */}
-  
+
   const getStatLines = () => {
     if (!playerSeasonStats) return [];
 
@@ -230,7 +230,7 @@ function PlayerProfile() {
                     </ToggleButtonGroup>
                     <Stack spacing={1}>
                       {getStatLines().map(({ label, value }) => (
-                        <Typography key={label}><strong>{label}:</strong> <span style={{ color: '#1976d2' }}>{value ?? '--'}</span></Typography>
+                        <Typography key={label}><strong>{label}:</strong> <span style={{ color: '#black' }}>{value ?? '--'}</span></Typography>
                       ))}
                     </Stack>
                   </>
