@@ -2,6 +2,7 @@
 
 A frontend-only NBA Draft evaluation platform tailored for the Dallas Mavericks front office. This application presents scouting data in an intuitive, interactive interface for evaluating top prospects ahead of the NBA Draft.
 
+[🔗](https://mavsdrafthub-yash.netlify.app/)
 ![screenshot](./public/screenshot.png)
 
 ## 🚀 Features
