@@ -313,7 +313,7 @@ function PlayerProfile() {
                                 {label}
                               </TableCell>
                               <TableCell sx={{ padding: '6px 12px' }}>
-                                {value ?? '--'}
+                              {typeof value === 'number' ? value.toFixed(1) : value ?? '--'}
                               </TableCell>
                             </TableRow>
                           ))}
@@ -362,7 +362,7 @@ function PlayerProfile() {
             elevation={1}
           >
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="h6" fontWeight="bold" color = '#002B5C'>Add Your Scouting Notes</Typography>
+              <Typography variant="h6" fontWeight="bold" color = '#002B5C'>Create Your Own Scouting Report</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <form onSubmit={handleAddReport}>
