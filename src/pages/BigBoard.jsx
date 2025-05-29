@@ -11,7 +11,8 @@ import {
   Paper,
   Avatar,
   TableSortLabel,
-  Box
+  Box,
+  Tooltip
 } from '@mui/material';
 import { useState } from 'react';
 
@@ -29,7 +30,7 @@ function calculateAverageRank(playerId) {
   if (values.length === 0) return null;
 
   const avg = values.reduce((sum, val) => sum + val, 0) / values.length;
-  return avg.toFixed(2);
+  return avg.toFixed(1);
 }
 
 function BigBoard() {
@@ -90,11 +91,13 @@ function BigBoard() {
         />
       </Box>
 
-      {/* UX Decision: Explain the color logic for context-aware sorting analysis */}
+      {/* UX Decision: Explain the color logic for context-aware sorting analysis, 
+      used colors and symbols adequate for those with color-blindness*/}
+
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-        <strong>Note:</strong> For each player, scout rankings are color-coded:
-        <span style={{ color: 'green', fontWeight: 'bold' }}> green</span> = scout is higher than average,
-        <span style={{ color: 'red', fontWeight: 'bold' }}> red</span> = scout is lower than average.
+        <strong>Legend:</strong> <span style={{ color: '#1f77b4' }}>▲ Higher</span>,
+        <span style={{ color: '#ff7f0e', marginLeft: '8px' }}>▼ Lower</span>,
+        <span style={{ marginLeft: '8px' , color: 'black',}}>Similar to avg</span>
       </Typography>
 
       {/* Main Table */}
@@ -149,13 +152,14 @@ function BigBoard() {
                   <TableCell>
                     <Link to={`/player/${player.playerId}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                       <Box display="flex" alignItems="center" gap={1}>
-                        {player.photoUrl && (
+                        {/* Default Image inserted for players without a photo */}
+                        {(player.photoUrl ? player.photoUrl : `https://cdn.nba.com/headshots/nba/latest/1040x760/${player.playerId}.png`) && (
                           <Avatar
-                            src={player.photoUrl}
+                            src={player.photoUrl || `https://cdn.nba.com/headshots/nba/latest/1040x760/${player.playerId}.png`}
                             alt={`${player.firstName} ${player.lastName}`}
                             sx={{ width: 36, height: 36 }}
                           />
-                        )}
+                       )}
                         <Typography fontWeight="500">
                           {player.firstName} {player.lastName}
                         </Typography>
@@ -176,16 +180,24 @@ function BigBoard() {
                         : null;
 
                     let color = 'inherit';
+                    let symbol = '';
                     if (rank != null && avgRankValue != null) {
                       const diff = rank - avgRankValue;
-                      if (diff <= -2) color = 'green';
-                      else if (diff >= 2) color = 'red';
-                    }
+                      if (diff <= -2) {
+                        color = '#1f77b4'; 
+                        symbol = '▲';
+                      } else if (diff >= 2) {
+                        color = '#ff7f0e'; 
+                        symbol = '▼';
+                      }
+                    }                        
 
                     return (
-                      <TableCell key={scout} style={{ color }}>
-                        {rank ?? '--'}
-                      </TableCell>
+                      <Tooltip title={`Compared to avg: ${avgRankValue?.toFixed(1) ?? '--'}`} key={scout}>
+                        <TableCell sx={{ color, fontWeight: 'bold' }}>
+                          {rank != null ? `${rank} ${symbol}` : '--'}
+                        </TableCell>
+                      </Tooltip>
                     );
                   })}
 

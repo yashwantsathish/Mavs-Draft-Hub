@@ -15,6 +15,11 @@ import {
   Avatar,
   Button,
   TextField,
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
+  TableContainer,
   Paper,
   Box,
   Stack,
@@ -31,9 +36,11 @@ import { useState } from 'react';
 
 function formatHeight(inches) {
   const feet = Math.floor(inches / 12);
-  const remainder = Math.round(inches % 12);
-  return `${feet}'${remainder}"`;
+  const remainder = inches % 12;
+  const preciseInches = remainder.toFixed(2).replace(/\.00$/, '');
+  return `${feet}'${preciseInches}"`;
 }
+
 
 function PlayerProfile() {
   const { id } = useParams();
@@ -43,6 +50,15 @@ function PlayerProfile() {
   const [reportName, setReportName] = useState('');
   const [reportText, setReportText] = useState('');
   const [statView, setStatView] = useState('counting');
+
+  const playerSeasons = seasonLogs
+    .filter((s) => s.playerId === playerId)
+    .sort((a, b) => b.Season - a.Season); // most recent season first
+
+  const [selectedSeason, setSelectedSeason] = useState(playerSeasons[0] ?? null);
+
+  const currentStats = selectedSeason;
+
 
   const playerMeasurements = measurements.find((m) => m.playerId === playerId);
   const playerSeasonStats = seasonLogs.find((s) => s.playerId === playerId);
@@ -64,58 +80,58 @@ function PlayerProfile() {
   {/* All content below is dynamically pulled from structured JSON – no hardcoded values */}
 
   const getStatLines = () => {
-    if (!playerSeasonStats) return [];
+    if (!currentStats) return [];
 
     // INTERACTIVE STAT VIEW TOGGLE
     // Allows switching views without overwhelming users. Meets spec requirement for changing display by input.
     const lines = {
       total: [
-        { label: 'Season', value: playerSeasonStats.Season },
-        { label: 'PTS', value: playerSeasonStats.PTS },
-        { label: 'AST', value: playerSeasonStats.AST },
-        { label: 'TRB', value: playerSeasonStats.TRB },
-        { label: 'TOV', value: playerSeasonStats.TOV },
-        { label: 'STL', value: playerSeasonStats.STL },
-        { label: 'BLK', value: playerSeasonStats.BLK },
-        { label: 'PF', value: playerSeasonStats.PF },
-        { label: 'FGA', value: playerSeasonStats.FGA },
-        { label: 'FG%', value: playerSeasonStats['FG%'] },
-        { label: 'eFG%', value: playerSeasonStats['eFG%'] },
-        { label: '2PA', value: playerSeasonStats.FG2A },
-        { label: '2P%', value: playerSeasonStats['FG2%'] },
-        { label: '3PA', value: playerSeasonStats['3PA'] },
-        { label: '3P%', value: playerSeasonStats['3P%'] },
-        { label: 'FTA', value: playerSeasonStats.FTA },
-        { label: 'FT%', value: playerSeasonStats.FTP },
-        { label: 'DRB', value: playerSeasonStats.DRB },
-        { label: 'ORB', value: playerSeasonStats.ORB }
+        { label: 'Season', value: currentStats.Season },
+        { label: 'PTS', value: currentStats.PTS },
+        { label: 'AST', value: currentStats.AST },
+        { label: 'TRB', value: currentStats.TRB },
+        { label: 'TOV', value: currentStats.TOV },
+        { label: 'STL', value: currentStats.STL },
+        { label: 'BLK', value: currentStats.BLK },
+        { label: 'PF', value: currentStats.PF },
+        { label: 'FGA', value: currentStats.FGA },
+        { label: 'FG%', value: currentStats['FG%'] },
+        { label: 'eFG%', value: currentStats['eFG%'] },
+        { label: '2PA', value: currentStats.FG2A },
+        { label: '2P%', value: currentStats['FG2%'] },
+        { label: '3PA', value: currentStats['3PA'] },
+        { label: '3P%', value: currentStats['3P%'] },
+        { label: 'FTA', value: currentStats.FTA },
+        { label: 'FT%', value: currentStats.FTP },
+        { label: 'DRB', value: currentStats.DRB },
+        { label: 'ORB', value: currentStats.ORB }
       ],
       counting: [
-        { label: 'Season', value: playerSeasonStats.Season },
-        { label: 'GP', value: playerSeasonStats.GP },
-        { label: 'MP', value: playerSeasonStats.MP },
-        { label: 'PTS', value: playerSeasonStats.PTS },
-        { label: 'AST', value: playerSeasonStats.AST },
-        { label: 'TRB', value: playerSeasonStats.TRB },
-        { label: 'DRB', value: playerSeasonStats.DRB },
-        { label: 'ORB', value: playerSeasonStats.ORB },
-        { label: 'STL', value: playerSeasonStats.STL },
-        { label: 'BLK', value: playerSeasonStats.BLK },
-        { label: 'TOV', value: playerSeasonStats.TOV },
-        { label: 'PF', value: playerSeasonStats.PF }
+        { label: 'Season', value: currentStats.Season },
+        { label: 'GP', value: currentStats.GP },
+        { label: 'MP', value: currentStats.MP },
+        { label: 'PTS', value: currentStats.PTS },
+        { label: 'AST', value: currentStats.AST },
+        { label: 'TRB', value: currentStats.TRB },
+        { label: 'DRB', value: currentStats.DRB },
+        { label: 'ORB', value: currentStats.ORB },
+        { label: 'STL', value: currentStats.STL },
+        { label: 'BLK', value: currentStats.BLK },
+        { label: 'TOV', value: currentStats.TOV },
+        { label: 'PF', value: currentStats.PF }
       ],
       scoring: [
-        { label: 'Season', value: playerSeasonStats.Season },
-        { label: 'PTS', value: playerSeasonStats.PTS },
-        { label: 'FGA', value: playerSeasonStats.FGA },
-        { label: 'FG%', value: playerSeasonStats['FG%'] },
-        { label: 'eFG%', value: playerSeasonStats['eFG%'] },
-        { label: '2PA', value: playerSeasonStats.FG2A },
-        { label: '2P%', value: playerSeasonStats['FG2%'] },
-        { label: '3PA', value: playerSeasonStats['3PA'] },
-        { label: '3P%', value: playerSeasonStats['3P%'] },
-        { label: 'FTA', value: playerSeasonStats.FTA },
-        { label: 'FT%', value: playerSeasonStats.FTP }
+        { label: 'Season', value: currentStats.Season },
+        { label: 'PTS', value: currentStats.PTS },
+        { label: 'FGA', value: currentStats.FGA },
+        { label: 'FG%', value: currentStats['FG%'] },
+        { label: 'eFG%', value: currentStats['eFG%'] },
+        { label: '2PA', value: currentStats.FG2A },
+        { label: '2P%', value: currentStats['FG2%'] },
+        { label: '3PA', value: currentStats['3PA'] },
+        { label: '3P%', value: currentStats['3P%'] },
+        { label: 'FTA', value: currentStats.FTA },
+        { label: 'FT%', value: currentStats.FTP }
       ]
     };
 
@@ -153,21 +169,21 @@ function PlayerProfile() {
             p: 3,
             mb: 4,
             borderRadius: 2,
-            boxShadow: 2,
+            boxShadow: 12,
             backgroundColor: '#f0f8ff'
           }}
         >
           <Avatar src={player.photoUrl} alt={`${player.firstName} ${player.lastName}`} sx={{ width: 120, height: 120, mb: 2 }} />
           <Typography variant="h5" fontWeight="bold" sx={{ color: '#002B5C' }}>{player.firstName} {player.lastName}</Typography>
           <Typography variant="subtitle1" color="text.secondary">{player.currentTeam}</Typography>
-          {playerMeasurements?.heightShoes && (
+          {player.height && (
             <Typography variant="body2" fontWeight="bold" mt={1}>
-              Height: {formatHeight(playerMeasurements.heightShoes)} ({playerMeasurements.heightShoes}")
+              Height: {formatHeight(player.height)} ({player.height}")
             </Typography>
           )}
-          {playerMeasurements?.weight && (
+          {player.weight && (
             <Typography variant="body2" fontWeight="bold">
-              Weight: {playerMeasurements.weight} lbs
+              Weight: {player.weight} lbs
             </Typography>
           )}
         </Box>
@@ -176,75 +192,148 @@ function PlayerProfile() {
         {/* Conditionally rendered with mobile stacking behavior */}
         <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3, mb: 4 }}>
           {/* MEASUREMENTS */}
-          <Paper elevation={2} sx={{ p: 2, width: { xs: '100%', md: '50%' } }}>
+          <Paper elevation={2} sx={{ p: 2, width: { xs: '100%', md: '50%' } , boxShadow: 2}}>
             <Accordion>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="h6" fontWeight="bold" sx={{ color: '#00538C' }}>Measurements </Typography>
+              <Typography variant="h6" fontWeight="bold" sx={{ color: '#002B5C' }}>Measurements </Typography>
               </AccordionSummary>
               <AccordionDetails>
                 {playerMeasurements ? (
-                  <Stack spacing={1}>
-                    <Typography><strong>Height (No Shoes):</strong> {playerMeasurements.heightNoShoes ?? '--'} in</Typography>
-                    <Typography><strong>Wingspan:</strong> {playerMeasurements.wingspan ?? '--'} in</Typography>
-                    <Typography><strong>Standing Reach:</strong> {playerMeasurements.reach ?? '--'} in</Typography>
-                    <Typography><strong>Max Vertical:</strong> {playerMeasurements.maxVertical ?? '--'} in</Typography>
-                    <Typography><strong>No-Step Vertical:</strong> {playerMeasurements.noStepVertical ?? '--'} in</Typography>
-                    <Typography><strong>Hand Length:</strong> {playerMeasurements.handLength ?? '--'} in</Typography>
-                    <Typography><strong>Hand Width:</strong> {playerMeasurements.handWidth ?? '--'} in</Typography>
-                    <Typography><strong>Lane Agility:</strong> {playerMeasurements.agility ?? '--'} sec</Typography>
-                    <Typography><strong>Sprint:</strong> {playerMeasurements.sprint ?? '--'} sec</Typography>
-                    <Typography><strong>Shuttle (Best):</strong> {playerMeasurements.shuttleBest ?? '--'} sec</Typography>
-                    <Typography><strong>Body Fat %:</strong> {playerMeasurements.bodyFat ?? '--'}</Typography>
-                  </Stack>
+                 <TableContainer component={Paper} sx={{ mt: 2 }}>
+                 <Table size="small" sx={{ minWidth: 250, borderCollapse: 'collapse' }}>
+                   <TableBody>
+                     {[
+                       [
+                        'Height (With Shoes):',
+                        playerMeasurements.heightShoes
+                          ? `${playerMeasurements.heightShoes} in / ${formatHeight(playerMeasurements.heightShoes)}`
+                          : '--'
+                      ],
+                      [
+                        'Height (No Shoes):',
+                        playerMeasurements.heightNoShoes
+                          ? `${playerMeasurements.heightNoShoes} in / ${formatHeight(playerMeasurements.heightNoShoes)}`
+                          : '--'
+                      ],
+                      [
+                        'Wingspan:',
+                        playerMeasurements.wingspan && playerMeasurements.heightNoShoes
+                          ? `${playerMeasurements.wingspan} in / ${formatHeight(playerMeasurements.wingspan)} (${(playerMeasurements.wingspan - playerMeasurements.heightNoShoes) >= 0 ? '+' : ''}${(playerMeasurements.wingspan - playerMeasurements.heightNoShoes).toFixed(1)})`
+                          : '--'
+                      ],
+                       ['Standing Reach:', `${playerMeasurements.reach ?? '--'} in`],
+                       ['Max Vertical:', `${playerMeasurements.maxVertical ?? '--'} in`],
+                       ['No-Step Vertical:', `${playerMeasurements.noStepVertical ?? '--'} in`],
+                       ['Hand Length:', `${playerMeasurements.handLength ?? '--'} in`],
+                       ['Hand Width:', `${playerMeasurements.handWidth ?? '--'} in`],
+                       ['Lane Agility:', `${playerMeasurements.agility ?? '--'} sec`],
+                       ['Sprint:', `${playerMeasurements.sprint ?? '--'} sec`],
+                       ['Shuttle (Best):', `${playerMeasurements.shuttleBest ?? '--'} sec`],
+                       ['Body Fat %:', `${playerMeasurements.bodyFat ?? '--'}`]
+                     ].map(([label, value]) => (
+                       <TableRow key={label}>
+                         <TableCell
+                           sx={{
+                             backgroundColor: '#f5f5f5',
+                             fontWeight: 'bold',
+                             border: '1px solid #e0e0e0',
+                             width: '50%'
+                           }}
+                         >
+                           {label}
+                         </TableCell>
+                         <TableCell sx={{ border: '1px solid #e0e0e0' }}>{value}</TableCell>
+                       </TableRow>
+                     ))}
+                   </TableBody>
+                 </Table>
+               </TableContainer>        
                 ) : <Typography>No measurement data available.</Typography>}
               </AccordionDetails>
             </Accordion>
           </Paper>
 
           {/* SEASON STATS */}
-          <Paper elevation={2} sx={{ p: 2, width: { xs: '100%', md: '50%' } }}>
-            <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="h6" fontWeight="bold" sx={{ color: '#00538C' }}>Season Stats</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                {playerSeasonStats ? (
-                  /*
-                  Interactive Component: Stat View Toggle
-                      This satisfies the spec's requirement for an input that changes displayed data.
-                      It enables decision-makers to explore stats at different levels (total, scoring, counting)
-                      without overwhelming them up front: keeping the default view focused and simple
-                      while allowing optional deeper dives.
-                  */
-                  <>
-                    <ToggleButtonGroup
-                      value={statView}
-                      exclusive
-                      onChange={(e, newVal) => newVal && setStatView(newVal)}
-                      size="small"
-                      sx={{ mb: 2 }}
-                    >
-                      <ToggleButton value="total">Total</ToggleButton>
-                      <ToggleButton value="counting">Counting</ToggleButton>
-                      <ToggleButton value="scoring">Scoring</ToggleButton>
-                    </ToggleButtonGroup>
-                    <Stack spacing={1}>
-                      {getStatLines().map(({ label, value }) => (
-                        <Typography key={label}><strong>{label}:</strong> <span style={{ color: '#black' }}>{value ?? '--'}</span></Typography>
-                      ))}
-                    </Stack>
-                  </>
-                ) : <Typography>No season stats available.</Typography>}
-              </AccordionDetails>
-            </Accordion>
-          </Paper>
+<Paper elevation={2} sx={{ p: 2, width: { xs: '100%', md: '50%' }, boxShadow: 2 }}>
+  <Accordion>
+    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+      <Typography variant="h6" fontWeight="bold" sx={{ color: '#002B5C' }}>Season Stats</Typography>
+    </AccordionSummary>
+    <AccordionDetails>
+          {playerSeasons.length > 0 ? (
+            <>
+              {/* Season Dropdown */}
+              <TextField
+                  select
+                  label="Select Season"
+                  value={JSON.stringify(selectedSeason)}
+                  onChange={(e) => {
+                    const parsed = JSON.parse(e.target.value);
+                    setSelectedSeason(parsed);
+                  }}
+                  size="small"
+                  fullWidth
+                  sx={{ mb: 2 }}
+                  SelectProps={{ native: true }}
+                >
+                  {playerSeasons.map((s) => (
+                    <option key={`${s.Season}-${s.Team}-${s.League}`} value={JSON.stringify(s)}>
+                      {s.Season} – {s.Team} ({s.League})
+                    </option>
+                  ))}
+              </TextField>
+
+              {/* View Toggle */}
+              <ToggleButtonGroup
+                value={statView}
+                exclusive
+                onChange={(e, newVal) => newVal && setStatView(newVal)}
+                size="small"
+                sx={{ mb: 2 }}
+              >
+                <ToggleButton value="total">Total</ToggleButton>
+                <ToggleButton value="counting">Counting</ToggleButton>
+                <ToggleButton value="scoring">Scoring</ToggleButton>
+              </ToggleButtonGroup>
+
+                      {/* Stats Table */}
+                      <Table size="small" sx={{ minWidth: 200, borderCollapse: 'collapse' }}>
+                        <TableBody>
+                          {getStatLines().map(({ label, value }) => (
+                            <TableRow key={label} sx={{ borderBottom: '1px solid #ccc' }}>
+                              <TableCell
+                                sx={{
+                                  fontWeight: 'bold',
+                                  borderRight: '1px solid #ccc',
+                                  padding: '6px 12px',
+                                  backgroundColor: '#f9f9f9',
+                                  width: '45%'
+                                }}
+                              >
+                                {label}
+                              </TableCell>
+                              <TableCell sx={{ padding: '6px 12px' }}>
+                                {value ?? '--'}
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </>
+                  ) : (
+                    <Typography>No season stats available.</Typography>
+                  )}
+                </AccordionDetails>
+              </Accordion>
+            </Paper>
+
         </Box>
 
         {/* OFFICIAL SCOUTING REPORTS, formatted for user convenience */}
-        <Paper elevation={2} sx={{ p: 2 }}>
+        <Paper elevation={2} sx={{ p: 2 , boxShadow: 2}}>
           <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography variant="h6" fontWeight="bold" sx={{ color: '#00538C' }}>Official Scouting Reports</Typography>
+            <Typography variant="h6" fontWeight="bold" sx={{ color: '#002B5C' }}>Official Scouting Reports</Typography>
             </AccordionSummary>
             <AccordionDetails>
               {playerReports.length > 0 ? (
@@ -261,12 +350,19 @@ function PlayerProfile() {
 
         {/* USER-GENERATED SCOUTING REPORTS */}
         {/* Form uses local state only per spec. Only visible below official reports. */}
-        <Paper elevation={2} sx={{ mt: 4, p: 1 }}>
+        <Paper elevation={2} 
+        sx={{
+          mt: 4,
+          px: 2,
+          py: 1.5,
+          borderRadius: 2,
+          boxShadow: 2
+        }}>
           <Accordion
             elevation={1}
           >
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="h6" fontWeight="bold">Add Your Scouting Notes</Typography>
+              <Typography variant="h6" fontWeight="bold" color = '#002B5C'>Add Your Scouting Notes</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <form onSubmit={handleAddReport}>
