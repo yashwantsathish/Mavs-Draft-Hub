@@ -41,6 +41,25 @@ function formatHeight(inches) {
   return `${feet}'${preciseInches}"`;
 }
 
+function getPercentile(value, allValues) {
+  const sorted = allValues
+    .filter(v => typeof v === 'number')
+    .sort((a, b) => a - b);
+
+  const below = sorted.filter(v => v < value).length;
+  return Math.round((below / sorted.length) * 100);
+}
+
+const allMaxVert = measurements.map(m => m.maxVertical).filter(v => typeof v === 'number');
+const allNoStepVert = measurements.map(m => m.noStepVertical).filter(v => typeof v === 'number');
+const allReach = measurements.map(m => m.reach).filter(v => typeof v === 'number');
+const allAgility = measurements.map(m => m.agility).filter(v => typeof v === 'number');
+const allSprint = measurements.map(m => m.sprint).filter(v => typeof v === 'number');
+const allShuttle = measurements.map(m => m.shuttleBest).filter(v => typeof v === 'number');
+const allHandLength = measurements.map(m => m.handLength).filter(v => typeof v === 'number');
+const allHandWidth = measurements.map(m => m.handWidth).filter(v => typeof v === 'number');
+const allBodyFat = measurements.map(m => m.bodyFat).filter(v => typeof v === 'number');
+
 
 function PlayerProfile() {
   const { id } = useParams();
@@ -221,14 +240,54 @@ function PlayerProfile() {
                           ? `${playerMeasurements.wingspan} in / ${formatHeight(playerMeasurements.wingspan)} (${(playerMeasurements.wingspan - playerMeasurements.heightNoShoes) >= 0 ? '+' : ''}${(playerMeasurements.wingspan - playerMeasurements.heightNoShoes).toFixed(1)})`
                           : '--'
                       ],
-                       ['Standing Reach:', `${playerMeasurements.reach ?? '--'} in`],
-                       ['Max Vertical:', `${playerMeasurements.maxVertical ?? '--'} in`],
-                       ['No-Step Vertical:', `${playerMeasurements.noStepVertical ?? '--'} in`],
-                       ['Hand Length:', `${playerMeasurements.handLength ?? '--'} in`],
-                       ['Hand Width:', `${playerMeasurements.handWidth ?? '--'} in`],
-                       ['Lane Agility:', `${playerMeasurements.agility ?? '--'} sec`],
-                       ['Sprint:', `${playerMeasurements.sprint ?? '--'} sec`],
-                       ['Shuttle (Best):', `${playerMeasurements.shuttleBest ?? '--'} sec`],
+                      [
+                        'Standing Reach:',
+                        playerMeasurements.reach
+                          ? `${playerMeasurements.reach} in (${getPercentile(playerMeasurements.reach, allReach)}th%)`
+                          : '--'
+                      ],                      
+                       [
+                        'Max Vertical:',
+                        playerMeasurements.maxVertical
+                          ? `${playerMeasurements.maxVertical} in (${getPercentile(playerMeasurements.maxVertical, allMaxVert)}th%)`
+                          : '--'
+                      ],                      
+                      [
+                        'No-Step Vertical:',
+                        playerMeasurements.noStepVertical
+                          ? `${playerMeasurements.noStepVertical} in (${getPercentile(playerMeasurements.noStepVertical, allNoStepVert)}th%)`
+                          : '--'
+                      ],                      
+                       [
+                        'Hand Length:',
+                        playerMeasurements.handLength
+                          ? `${playerMeasurements.handLength} in (${getPercentile(playerMeasurements.handLength, allHandLength)}th%)`
+                          : '--'
+                      ],
+                      [
+                        'Hand Width:',
+                        playerMeasurements.handWidth
+                          ? `${playerMeasurements.handWidth} in (${getPercentile(playerMeasurements.handWidth, allHandWidth)}th%)`
+                          : '--'
+                      ],                      
+                       [
+                        'Lane Agility:',
+                        playerMeasurements.agility
+                          ? `${playerMeasurements.agility} sec (${100 - getPercentile(playerMeasurements.agility, allAgility)}th%)`
+                          : '--'
+                      ],
+                       [
+                        'Sprint:',
+                        playerMeasurements.sprint
+                          ? `${playerMeasurements.sprint} sec (${100 - getPercentile(playerMeasurements.sprint, allSprint)}th%)`
+                          : '--'
+                      ],                      
+                       [
+                        'Shuttle (Best):',
+                        playerMeasurements.shuttleBest
+                          ? `${playerMeasurements.shuttleBest} sec (${100 - getPercentile(playerMeasurements.shuttleBest, allShuttle)}th%)`
+                          : '--'
+                      ],
                        ['Body Fat %:', `${playerMeasurements.bodyFat ?? '--'}`]
                      ].map(([label, value]) => (
                        <TableRow key={label}>
@@ -247,6 +306,17 @@ function PlayerProfile() {
                      ))}
                    </TableBody>
                  </Table>
+                 <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    sx={{
+                      mt: 10,
+                      pt: 1,
+                      fontStyle: 'italic'
+                    }}
+                  >
+                    Percentiles shown are relative to all players in the big board.
+                  </Typography>
                </TableContainer>        
                 ) : <Typography>No measurement data available.</Typography>}
               </AccordionDetails>
@@ -314,7 +384,7 @@ function PlayerProfile() {
                               </TableCell>
                               <TableCell sx={{ padding: '6px 12px' }}>
                               {typeof value === 'number'
-                                  ? (label === 'GP' ? value : value.toFixed(1))
+                                  ? (label === 'GP' || label === 'Season' ? value : value.toFixed(1))
                                   : value ?? '--'}
                               </TableCell>
                             </TableRow>

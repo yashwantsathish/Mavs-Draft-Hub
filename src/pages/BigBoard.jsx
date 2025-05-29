@@ -82,10 +82,10 @@ function BigBoard() {
       {/* Title Bar */}
       <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
         <Typography variant="h4" fontWeight="bold" color="#00538C">
-          Mavs Draft Big Board
+          Dallas Mavericks 2025 Draft Big Board
         </Typography>
         <img
-          src="https://upload.wikimedia.org/wikipedia/en/thumb/9/97/Dallas_Mavericks_logo.svg/1920px-Dallas_Mavericks_logo.svg.png"
+          src="https://www.mavs.com/wp-content/uploads/2019/09/Logo_Release.png"
           alt="Mavs Logo"
           style={{ height: 50 }}
         />
