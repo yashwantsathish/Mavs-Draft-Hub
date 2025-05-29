@@ -313,7 +313,9 @@ function PlayerProfile() {
                                 {label}
                               </TableCell>
                               <TableCell sx={{ padding: '6px 12px' }}>
-                              {typeof value === 'number' ? value.toFixed(1) : value ?? '--'}
+                              {typeof value === 'number'
+                                  ? (label === 'GP' ? value : value.toFixed(1))
+                                  : value ?? '--'}
                               </TableCell>
                             </TableRow>
                           ))}
