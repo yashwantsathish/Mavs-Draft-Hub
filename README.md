@@ -2,7 +2,7 @@
 
 A frontend-only NBA Draft evaluation platform tailored for the Dallas Mavericks front office. This application presents scouting data in an intuitive, interactive interface for evaluating top prospects ahead of the NBA Draft.
 
-![screenshot](./public/screenshot.png) <!-- Optional: Replace with actual screenshot if hosted -->
+![screenshot](./public/screenshot.png)
 
 ## 🚀 Features
 
