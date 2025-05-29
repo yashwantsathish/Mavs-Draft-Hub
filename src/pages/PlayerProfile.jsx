@@ -324,34 +324,34 @@ function PlayerProfile() {
           </Paper>
 
           {/* SEASON STATS */}
-<Paper elevation={2} sx={{ p: 2, width: { xs: '100%', md: '50%' }, boxShadow: 2 }}>
-  <Accordion>
-    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-      <Typography variant="h6" fontWeight="bold" sx={{ color: '#002B5C' }}>Season Stats</Typography>
-    </AccordionSummary>
-    <AccordionDetails>
-          {playerSeasons.length > 0 ? (
-            <>
-              {/* Season Dropdown */}
-              <TextField
-                  select
-                  label="Select Season"
-                  value={JSON.stringify(selectedSeason)}
-                  onChange={(e) => {
-                    const parsed = JSON.parse(e.target.value);
-                    setSelectedSeason(parsed);
-                  }}
-                  size="small"
-                  fullWidth
-                  sx={{ mb: 2 }}
-                  SelectProps={{ native: true }}
-                >
-                  {playerSeasons.map((s) => (
-                    <option key={`${s.Season}-${s.Team}-${s.League}`} value={JSON.stringify(s)}>
-                      {s.Season} – {s.Team} ({s.League})
-                    </option>
-                  ))}
-              </TextField>
+        <Paper elevation={2} sx={{ p: 2, width: { xs: '100%', md: '50%' }, boxShadow: 2 }}>
+          <Accordion>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography variant="h6" fontWeight="bold" sx={{ color: '#002B5C' }}>Season Stats</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+            {playerSeasons.length > 0 ? (
+              <>
+                {/* Season Dropdown */}
+                <TextField
+                    select
+                    label="Select Season"
+                    value={JSON.stringify(selectedSeason)}
+                    onChange={(e) => {
+                      const parsed = JSON.parse(e.target.value);
+                      setSelectedSeason(parsed);
+                    }}
+                    size="small"
+                    fullWidth
+                    sx={{ mb: 2 }}
+                    SelectProps={{ native: true }}
+                  >
+                    {playerSeasons.map((s) => (
+                      <option key={`${s.Season}-${s.Team}-${s.League}`} value={JSON.stringify(s)}>
+                        {s.Season} – {s.Team} ({s.League})
+                      </option>
+                    ))}
+                </TextField>
 
               {/* View Toggle */}
               <ToggleButtonGroup
@@ -365,7 +365,6 @@ function PlayerProfile() {
                 <ToggleButton value="counting">Counting</ToggleButton>
                 <ToggleButton value="scoring">Scoring</ToggleButton>
               </ToggleButtonGroup>
-
                       {/* Stats Table */}
                       <Table size="small" sx={{ minWidth: 200, borderCollapse: 'collapse' }}>
                         <TableBody>
