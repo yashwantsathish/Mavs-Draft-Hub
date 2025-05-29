@@ -1,12 +1,89 @@
-# React + Vite
+# 🏀 Mavs Draft Hub
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A frontend-only NBA Draft evaluation platform tailored for the Dallas Mavericks front office. This application presents scouting data in an intuitive, interactive interface for evaluating top prospects ahead of the NBA Draft.
 
-Currently, two official plugins are available:
+![screenshot](./public/screenshot.png) <!-- Optional: Replace with actual screenshot if hosted -->
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## Expanding the ESLint configuration
+- **Big Board** with sortable scout rankings and average rank calculations
+- **Color-coded evaluations** to highlight which scouts are higher or lower on a prospect
+- **Player Profiles** featuring:
+  - Measurements with percentile comparisons vs other prospects
+  - Season stats viewable by category (scoring, counting, total)
+  - Season-by-season stat breakdowns with team and league info
+  - Official and user-submitted scouting reports
+- **Responsive design** for laptop, tablet, and phone
+- **Material UI** components for sleek visual presentation
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 📊 Interactivity Highlights
+
+- **Stat View Toggle**: Users can switch between scoring, counting, and total metrics for season stats.
+- **Season Dropdown**: Quickly view multi-season performance for each player.
+- **Sortable Big Board Columns**: Click any scout’s column to sort by their ranking.
+- **Add Your Report**: Submit new scouting notes on any prospect — saved locally via `useState`.
+
+## 📁 Tech Stack
+
+- [React](https://reactjs.org/)
+- [Vite](https://vitejs.dev/)
+- [Material UI](https://mui.com/)
+- Hosted on [Netlify](https://www.netlify.com/)
+
+## 🧠 Design Decisions
+
+- **Percentile-based measurements** allow staff to compare prospects in context
+- **Clean, fixed layout tables** reduce visual fatigue and align category/values uniformly
+- **Colorblind-accessible cues** were considered for rank highlighting (e.g., using bolding and positioning in addition to color)
+
+## 🔧 Local Development
+
+1. Clone the repo:
+
+```bash
+git clone https://github.com/YOUR_USERNAME/mavs-draft-hub.git
+cd mavs-draft-hub
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Run locally:
+
+```bash
+npm run dev
+```
+
+## 🌐 Deployment
+
+This project is deployed on Netlify using CI from the main branch of this GitHub repository. Each commit triggers an automatic redeploy.
+
+---
+
+## 📌 Requirements Fulfilled
+
+✅ React + Vite frontend only  
+✅ Material UI components used throughout  
+✅ Sortable Big Board based on scout data  
+✅ Differentiates scouts who are high/low on a player  
+✅ Player Profiles w/ measurement, stats, and reports  
+✅ New scouting reports added with `useState`  
+✅ Input to change displayed data (stat views, season selector)  
+✅ Fully data-driven — easily supports new player data  
+
+---
+
+## 👨‍💼 Audience
+
+This project is designed with NBA front-office stakeholders in mind. It supports quick decision-making and deep dives without overwhelming the interface.
+
+---
+
+## 📬 Contact
+
+**Yashwant Sathish Kumar**  
+📧 yashwant.sathish@gmail.com  
+🔗 [LinkedIn](https://www.linkedin.com/in/yashwantsathish)
