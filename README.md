@@ -86,4 +86,4 @@ This project is designed with NBA front-office stakeholders in mind. It supports
 
 **Yashwant Sathish Kumar**  
 📧 yashwant.sathish@gmail.com  
-🔗 [LinkedIn](https://www.linkedin.com/in/yashwantsathish)
+🔗 [LinkedIn](https://www.linkedin.com/in/yashwant-sathishkumar/)
